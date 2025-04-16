@@ -1,0 +1,30 @@
+'''mmsegmentation only save the A,B matrices of LORA
+SO restoring the intial pretrained weight for inference'''
+
+import torch
+
+pretrained_weights = torch.load('/BS/DApt/work/project/segformer_test/work_dirs/fog_ORACLE/teacher.pth')
+pretrained_weightsx = torch.load('/BS/DApt/work/project/segformer_test/pretrained/updated_state_dict_b5.pth')
+
+
+def split_and_update_layer(layer_name):
+    #pretrained_weights = torch.load(path)
+    pretrained_state_dict = pretrained_weights
+    #backbone.layers.3.1.2.attn.attn.proj_q.weight
+
+    layer_components = layer_name.split('.')
+    layer_prefix = '.'.join(layer_components[:-1])
+
+    pretrained_state_dict[layer_name] = pretrained_weightsx[layer_name]
+
+    return pretrained_state_dict
+
+x = "backbone.layers.0.1.0.attn.attn.proj_q.weight, backbone.layers.0.1.0.attn.attn.proj_v.weight, backbone.layers.0.1.1.attn.attn.proj_q.weight, backbone.layers.0.1.1.attn.attn.proj_v.weight, backbone.layers.0.1.2.attn.attn.proj_q.weight, backbone.layers.0.1.2.attn.attn.proj_v.weight, backbone.layers.1.1.0.attn.attn.proj_q.weight, backbone.layers.1.1.0.attn.attn.proj_v.weight, backbone.layers.1.1.1.attn.attn.proj_q.weight, backbone.layers.1.1.1.attn.attn.proj_v.weight, backbone.layers.1.1.2.attn.attn.proj_q.weight, backbone.layers.1.1.2.attn.attn.proj_v.weight, backbone.layers.1.1.3.attn.attn.proj_q.weight, backbone.layers.1.1.3.attn.attn.proj_v.weight, backbone.layers.1.1.4.attn.attn.proj_q.weight, backbone.layers.1.1.4.attn.attn.proj_v.weight, backbone.layers.1.1.5.attn.attn.proj_q.weight, backbone.layers.1.1.5.attn.attn.proj_v.weight, backbone.layers.2.1.0.attn.attn.proj_q.weight, backbone.layers.2.1.0.attn.attn.proj_v.weight, backbone.layers.2.1.1.attn.attn.proj_q.weight, backbone.layers.2.1.1.attn.attn.proj_v.weight, backbone.layers.2.1.2.attn.attn.proj_q.weight, backbone.layers.2.1.2.attn.attn.proj_v.weight, backbone.layers.2.1.3.attn.attn.proj_q.weight, backbone.layers.2.1.3.attn.attn.proj_v.weight, backbone.layers.2.1.4.attn.attn.proj_q.weight, backbone.layers.2.1.4.attn.attn.proj_v.weight, backbone.layers.2.1.5.attn.attn.proj_q.weight, backbone.layers.2.1.5.attn.attn.proj_v.weight, backbone.layers.2.1.6.attn.attn.proj_q.weight, backbone.layers.2.1.6.attn.attn.proj_v.weight, backbone.layers.2.1.7.attn.attn.proj_q.weight, backbone.layers.2.1.7.attn.attn.proj_v.weight, backbone.layers.2.1.8.attn.attn.proj_q.weight, backbone.layers.2.1.8.attn.attn.proj_v.weight, backbone.layers.2.1.9.attn.attn.proj_q.weight, backbone.layers.2.1.9.attn.attn.proj_v.weight, backbone.layers.2.1.10.attn.attn.proj_q.weight, backbone.layers.2.1.10.attn.attn.proj_v.weight, backbone.layers.2.1.11.attn.attn.proj_q.weight, backbone.layers.2.1.11.attn.attn.proj_v.weight, backbone.layers.2.1.12.attn.attn.proj_q.weight, backbone.layers.2.1.12.attn.attn.proj_v.weight, backbone.layers.2.1.13.attn.attn.proj_q.weight, backbone.layers.2.1.13.attn.attn.proj_v.weight, backbone.layers.2.1.14.attn.attn.proj_q.weight, backbone.layers.2.1.14.attn.attn.proj_v.weight, backbone.layers.2.1.15.attn.attn.proj_q.weight, backbone.layers.2.1.15.attn.attn.proj_v.weight, backbone.layers.2.1.16.attn.attn.proj_q.weight, backbone.layers.2.1.16.attn.attn.proj_v.weight, backbone.layers.2.1.17.attn.attn.proj_q.weight, backbone.layers.2.1.17.attn.attn.proj_v.weight, backbone.layers.2.1.18.attn.attn.proj_q.weight, backbone.layers.2.1.18.attn.attn.proj_v.weight, backbone.layers.2.1.19.attn.attn.proj_q.weight, backbone.layers.2.1.19.attn.attn.proj_v.weight, backbone.layers.2.1.20.attn.attn.proj_q.weight, backbone.layers.2.1.20.attn.attn.proj_v.weight, backbone.layers.2.1.21.attn.attn.proj_q.weight, backbone.layers.2.1.21.attn.attn.proj_v.weight, backbone.layers.2.1.22.attn.attn.proj_q.weight, backbone.layers.2.1.22.attn.attn.proj_v.weight, backbone.layers.2.1.23.attn.attn.proj_q.weight, backbone.layers.2.1.23.attn.attn.proj_v.weight, backbone.layers.2.1.24.attn.attn.proj_q.weight, backbone.layers.2.1.24.attn.attn.proj_v.weight, backbone.layers.2.1.25.attn.attn.proj_q.weight, backbone.layers.2.1.25.attn.attn.proj_v.weight, backbone.layers.2.1.26.attn.attn.proj_q.weight, backbone.layers.2.1.26.attn.attn.proj_v.weight, backbone.layers.2.1.27.attn.attn.proj_q.weight, backbone.layers.2.1.27.attn.attn.proj_v.weight, backbone.layers.2.1.28.attn.attn.proj_q.weight, backbone.layers.2.1.28.attn.attn.proj_v.weight, backbone.layers.2.1.29.attn.attn.proj_q.weight, backbone.layers.2.1.29.attn.attn.proj_v.weight, backbone.layers.2.1.30.attn.attn.proj_q.weight, backbone.layers.2.1.30.attn.attn.proj_v.weight, backbone.layers.2.1.31.attn.attn.proj_q.weight, backbone.layers.2.1.31.attn.attn.proj_v.weight, backbone.layers.2.1.32.attn.attn.proj_q.weight, backbone.layers.2.1.32.attn.attn.proj_v.weight, backbone.layers.2.1.33.attn.attn.proj_q.weight, backbone.layers.2.1.33.attn.attn.proj_v.weight, backbone.layers.2.1.34.attn.attn.proj_q.weight, backbone.layers.2.1.34.attn.attn.proj_v.weight, backbone.layers.2.1.35.attn.attn.proj_q.weight, backbone.layers.2.1.35.attn.attn.proj_v.weight, backbone.layers.2.1.36.attn.attn.proj_q.weight, backbone.layers.2.1.36.attn.attn.proj_v.weight, backbone.layers.2.1.37.attn.attn.proj_q.weight, backbone.layers.2.1.37.attn.attn.proj_v.weight, backbone.layers.2.1.38.attn.attn.proj_q.weight, backbone.layers.2.1.38.attn.attn.proj_v.weight, backbone.layers.2.1.39.attn.attn.proj_q.weight, backbone.layers.2.1.39.attn.attn.proj_v.weight, backbone.layers.3.1.0.attn.attn.proj_q.weight, backbone.layers.3.1.0.attn.attn.proj_v.weight, backbone.layers.3.1.1.attn.attn.proj_q.weight, backbone.layers.3.1.1.attn.attn.proj_v.weight, backbone.layers.3.1.2.attn.attn.proj_q.weight, backbone.layers.3.1.2.attn.attn.proj_v.weight"
+layers_to_update = x.split(", ")
+
+updated_state_dict =pretrained_weights.copy()  # Create a copy to avoid modifying the original
+for layer_name in layers_to_update:
+    updated_state_dict = split_and_update_layer(layer_name)
+
+
+torch.save(updated_state_dict, '/BS/DApt/work/project/segformer_test/work_dirs/fog_ORACLE/teacher_rest.pth')
