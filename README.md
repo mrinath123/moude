@@ -4,7 +4,7 @@ This is the official repository for MoUDE: Source-Free Incremental Domain Learni
 
 ## Overview
 
-This repository contains code for training semantic segmentation models with domain adaptation techniques, focusing on weather and lighting condition adaptation. It supports both full finetuning and LoRA-based parameter-efficient finetuning.
+Semantic segmentation models struggle to adapt to new domains in real-world scenarios where access to source data is restricted due to privacy or storage constraints. Traditional domain adaptation methods require simultaneous access to source and target domains, an impractical assumption in dynamic environments, and face challenges such as catastrophic forgetting when adapting incrementally to multiple domains. To address these issues, we propose MoUDE, a Source-Free Incremental Domain Adaptation framework that enables sequential adaptation to new domains without source data while preserving performance on previously encountered domains. MoUDE employs a two-stage approach: first, it learns domain-specific experts by freezing a pretrained source model and adapting lightweight LoRA modules using self-training on unlabeled target data. Second, it introduces a Mixture of Domain Experts, combining predictions from domain-specific experts through adaptive gating networks ensuring robust cross-domain performance. Evaluations on ACDC, Cityscapes-C, and Weather Cityscapes datasets demonstrate significant performance gains over baselines, establishing MoUDE as a robust solution for source-free incremental domain adaptation in semantic segmentation.
 
 ## Installation
 
@@ -29,16 +29,16 @@ pip install -r requirements.txt
 - Weather Corrupted Cityscapes
 - Cityscapes-C
 
-
 ### Dataset Setup:
 
 1. **ACDC Dataset**:
-   - Download ACDC dataset
-   - Store in `project/acdc` directory
+   - Download ACDC dataset from the [official website](https://acdc.vision.ee.ethz.ch/)
+   - Store in the `acdc` directory in your project root
 
-2. **Cityscapes and Weather-corrupted Cityscapes**:
-   - Download Cityscapes and Cityscapes-C datasets
-   - Store in `project/data` directory
+2. **Cityscapes and Cityscapes-C**:
+   - Download Cityscapes from the [official website](https://www.cityscapes-dataset.com/)
+   - Download or generate Cityscapes-C (weather corrupted Cityscapes)
+   - Store in the `data` directory in your project root
 
 Your data directory structure should look like:
 ```
@@ -47,7 +47,7 @@ data/
 │   ├── leftImg8bit_trainvaltest/
 │   ├── gtFine_trainvaltest/
 │   └── ...
-acdc/
+├── acdc/
     ├── rgb_anon/
     ├── gt/
     └── ...
@@ -55,39 +55,40 @@ acdc/
 
 ## Training
 
-You can run the training scripts using bash or submit via sbatch:
+You can run the training scripts:
 
 ```bash
-bash /BS/DApt/work/project/segformer_test/scripts/script.sh
+bash scripts/train.sh
 ```
 
 ### Training Options:
 
 1. **LoRA-only Finetuning**:
-   - Use `tools/train.py` script
+   - Use the `tools/train.py` script
 
 2. **Full Finetuning**:
-   - Use `tools/train_lora_ft.py` script
+   - Use the `tools/train_lora_ft.py` script
 
 Example training command:
 ```bash
-python3 -m torch.distributed.launch --nproc_per_node=2 --master_port=29578 tools/train_lora_ft.py local_config/my_models/cityc_snow_cota.py --launcher pytorch
+python -m torch.distributed.launch --nproc_per_node=2 --master_port=29578 tools/train_lora_ft.py configs/moude/cityc_snow_cota.py --launcher pytorch
 ```
 
 ## Configuration
 
-All training configuration files are located in `local_config/my_models/`. Choose the appropriate configuration based on your adaptation scenario:
+All training configuration files are located in `configs/moude/`. Choose the appropriate configuration based on your adaptation scenario:
 
-- For IDASS adaptation: Use `cityc_snow_idass.py`
-- For COTTA adaptation: Use `cityc_snow_cota.py`
+- For IDASS adaptation: Use `configs/moude/cityc_snow_idass.py`
+- For COTTA adaptation: Use `configs/moude/cityc_snow_cota.py`
 
 ## Validation
 
 You can evaluate your trained models using:
 ```bash
-python tools/test.py local_config/my_models/cityc_snow_cota.py /path/to/checkpoint --eval mIoU
+python tools/test.py configs/moude/cityc_snow_cota.py /path/to/checkpoint --eval mIoU
 ```
 
 ## Pre-trained Weights
 
 Coming soon.
+
