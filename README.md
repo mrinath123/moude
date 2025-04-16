@@ -26,9 +26,9 @@ pip install -r requirements.txt
 ### Supported Datasets:
 - Cityscapes
 - ACDC
-- Cityscapes-C (Weather Corrupted Cityscapes)
-- GTA5
-- Synthia
+- Weather Corrupted Cityscapes
+- Cityscapes-C
+
 
 ### Dataset Setup:
 
